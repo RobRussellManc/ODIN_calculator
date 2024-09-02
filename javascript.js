@@ -12,7 +12,7 @@ let clearButton = document.querySelector("#clear");
 clearButton.addEventListener("click", () => reset());
 
 // Create operator buttons
-const operators = ['/', '+', '-', '*', '='];
+const operators = ['/', '+', '*', '-', '='];
 
 
 let number1 = '';
@@ -41,20 +41,31 @@ function record_keypresses(key_press) {
     // Ensure the key press value is a string
     key_press = String(key_press);
 
+    // Handle if a user clicks minus before clicking a number (allows it!)
+    if (key_press == '-' && number1 == ''){
+        number1 = number1 + key_press;
+        update_display(number1, number2, operator);
+        return
+    } else if (key_press == '-' && number2 == '') {
+        number2 = number2 + key_press;
+        update_display(number1, number2, operator);
+        return
+    }
+
 
 
     // Handle when user clicks equals
     if (key_press == '=' && number2 != '') {
         let result = do_calculation(number1, number2, operator);
-        resulthtml.textContent = result;
+        //resulthtml.textContent = result;
 
         // Number1 becomes the calculated result
         number1 = roundToThreeDPIfNeeded(result); 
-        number1html.textContent = `number1: ${number1}`;
+        //number1html.textContent = `number1: ${number1}`;
         number2 = '';
-        number2html.textContent = `number2: ${number2}`;
+        //number2html.textContent = `number2: ${number2}`;
         operator = '';
-        operatorhtml.textContent = operator;
+        //operatorhtml.textContent = operator;
 
         update_display(number1, number2, operator);
 
@@ -74,7 +85,7 @@ function record_keypresses(key_press) {
     if (operators.slice(0, -1).includes(key_press) && (number1 == '')) {
         return
     } else if (operators.slice(0, -1).includes(key_press)) {  
-        operatorhtml.textContent = key_press;
+        //operatorhtml.textContent = key_press;
         operator = key_press;
         update_display(number1, number2, operator);
         calculated_on_display = false;
@@ -83,16 +94,16 @@ function record_keypresses(key_press) {
         update_display(number1, number2, operator); // resets display to blank
         calculated_on_display = false;
         number1 = number1 + key_press;
-        number1html.textContent = `number1: ${number1}`;
+        //number1html.textContent = `number1: ${number1}`;
         update_display(number1, number2, operator);
  
     } else if (operator == '') { // When a user clicks a number
         number1 = number1 + key_press;
-        number1html.textContent = `number1: ${number1}`;
+        //number1html.textContent = `number1: ${number1}`;
         update_display(number1, number2, operator);
     } else {
         number2 = number2 + key_press; // When a user clicks a number after clicking an operator
-        number2html.textContent = `number2: ${number2}`;
+        //number2html.textContent = `number2: ${number2}`;
         update_display(number1, number2, operator);
         
     }
