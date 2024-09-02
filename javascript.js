@@ -110,25 +110,34 @@ function do_calculation(number1, number2, operator) {
 
 
 // Create the buttons 1 to 9
-for (let i=0; i < 10; i++) {
+for (let i=9; i > -1; i--) {
     let button = document.createElement("button");
     // give it an id
-    button.className = `button ${i}`;
+    button.className = `button number_${i}`;
     button.textContent = i;
-    main_box.appendChild(button);    
+    numbers_container.appendChild(button);    
 
     button.addEventListener("click", () => {record_keypresses(i)});
 
 }
 
 
-
+// Create operator buttons
 for (let i=0; i < operators.length; i++) {
-    let button = document.createElement("button");
-    button.className = (`operator ${operators[i]}`);
-    button.textContent = operators[i];
-    operator_box.appendChild(button);
-    button.addEventListener("click", () => {record_keypresses(operators[i])});
+    // use this if statement to create the equals button in the numbers div
+    if (operators[i] == '=') {
+        let button = document.createElement("button");
+        button.className = (`equals ${operators[i]}`);
+        button.textContent = operators[i];
+        numbers_container.appendChild(button);
+        button.addEventListener("click", () => {record_keypresses(operators[i])});
+    } else { // create other operators into their own div
+        let button = document.createElement("button");
+        button.className = (`operator ${operators[i]}`);
+        button.textContent = operators[i];
+        operators_container.appendChild(button);
+        button.addEventListener("click", () => {record_keypresses(operators[i])});
+    }
 }
 
 
