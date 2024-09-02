@@ -1,3 +1,10 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 
 #calculator_container {
     display: flex;
@@ -35,6 +42,7 @@
     font-family: 'Orbitron', sans-serif;
     color: white;
     font-size: 23px;
+    overflow: hidden;
 }
 
 #rob_text {
@@ -79,10 +87,7 @@
     
 }
 
-.equals {
-    order: 2;
 
-}
 
 #operators_container {
     display: wrap;
@@ -94,6 +99,7 @@ button {
     width: 50px;
     height: 50px;
     padding: 0px;
+    font-size: large;
     border-radius: 5px;
     background-color: rgb(161, 84, 56);
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Basic shadow */
@@ -102,8 +108,14 @@ button {
 
 button#clear {
     height: 20px;
+    font-size: 13px;
+    background-color: aliceblue;
 }
 
+button.equals {
+    order: 2;
+    background-color: grey;
+}
 
 .number_0 {
     width: 100px;

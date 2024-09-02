@@ -22,10 +22,26 @@ let operator = '';
 // Track if the display is showing something calculated 
 let calculated_on_display = false;
 
+function roundToThreeDPIfNeeded(number) {
+    // Convert the number to a string to check its decimal places
+    let str = number.toString();
+    
+    // Check if there is a decimal point and if there are more than 3 digits after it
+    if (str.includes('.') && str.split('.')[1].length > 3) {
+        // Round the number to 3 decimal places
+        return parseFloat(number.toFixed(3));
+    }
+    
+    // Return the number as it is if it doesn't need rounding
+    return number;
+}
+
 // function used to take button presses and store the numbers and operator
 function record_keypresses(key_press) {
     // Ensure the key press value is a string
     key_press = String(key_press);
+
+
 
     // Handle when user clicks equals
     if (key_press == '=' && number2 != '') {
@@ -33,7 +49,7 @@ function record_keypresses(key_press) {
         resulthtml.textContent = result;
 
         // Number1 becomes the calculated result
-        number1 = result; 
+        number1 = roundToThreeDPIfNeeded(result); 
         number1html.textContent = `number1: ${number1}`;
         number2 = '';
         number2html.textContent = `number2: ${number2}`;
@@ -53,7 +69,11 @@ function record_keypresses(key_press) {
     // Handle when users clicks a number or an operator
 
     // if user clicks an operator
-    if (operators.slice(0, -1).includes(key_press)) {  
+
+    // Handle if a user clicks an operator before entering a number
+    if (operators.slice(0, -1).includes(key_press) && (number1 == '')) {
+        return
+    } else if (operators.slice(0, -1).includes(key_press)) {  
         operatorhtml.textContent = key_press;
         operator = key_press;
         update_display(number1, number2, operator);
