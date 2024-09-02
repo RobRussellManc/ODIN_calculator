@@ -32,31 +32,34 @@ function record_keypresses(key_press) {
         let result = do_calculation(number1, number2, operator);
         resulthtml.textContent = result;
 
-        number1 = result;
+        // Number1 becomes the calculated result
+        number1 = result; 
         number1html.textContent = `number1: ${number1}`;
         number2 = '';
         number2html.textContent = `number2: ${number2}`;
         operator = '';
         operatorhtml.textContent = operator;
-        
+
         update_display(number1, number2, operator);
 
         // Update tracker to show the display is currently showing a calculated value
         calculated_on_display = true;
 
         return
-    } else if (key_press == '=') {
+    } else if (key_press == '=') { // If user just clicks = without entering something to calculate, ignore the click
         return;
     }
 
     // Handle when users clicks a number or an operator
-    if (operators.slice(0, -1).includes(key_press)) {  // if user clicks an operator
+
+    // if user clicks an operator
+    if (operators.slice(0, -1).includes(key_press)) {  
         operatorhtml.textContent = key_press;
         operator = key_press;
         update_display(number1, number2, operator);
         calculated_on_display = false;
     } else if (calculated_on_display == true) {  // This handles if a user clicks a number while display is showing a calculated value
-        reset();
+        reset(); 
         update_display(number1, number2, operator); // resets display to blank
         calculated_on_display = false;
         number1 = number1 + key_press;
@@ -75,16 +78,19 @@ function record_keypresses(key_press) {
     }
 }
 
+// Resets all numbers and operators stored, and blanks the display
 function reset() {
     number1 = '';
     number2 = '';
     operator = '';
+    update_display(number1, number2, operator);
 }
 
 
 function update_display(number1, number2, operator) {
     displayhtml.textContent = number1 + operator + number2;
 }
+
 
 function do_calculation(number1, number2, operator) {
     number1 = Number(number1);
