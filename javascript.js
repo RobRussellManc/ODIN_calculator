@@ -7,6 +7,9 @@ let number2html = document.querySelector("#number2");
 let operatorhtml = document.querySelector("#operator");
 let resulthtml = document.querySelector("#result");
 let displayhtml = document.querySelector("#display");
+let clearButton = document.querySelector("#clear");
+
+clearButton.addEventListener("click", () => reset());
 
 // Create operator buttons
 const operators = ['/', '+', '-', '*', '='];
@@ -15,6 +18,9 @@ const operators = ['/', '+', '-', '*', '='];
 let number1 = '';
 let number2 = '';
 let operator = '';
+
+// Track if the display is showing something calculated 
+let calculated_on_display = false;
 
 // function used to take button presses and store the numbers and operator
 function record_keypresses(key_press) {
@@ -25,27 +31,65 @@ function record_keypresses(key_press) {
     if (key_press == '=' && number2 != '') {
         let result = do_calculation(number1, number2, operator);
         resulthtml.textContent = result;
+
+        number1 = result;
+        number1html.textContent = `number1: ${number1}`;
+        number2 = '';
+        number2html.textContent = `number2: ${number2}`;
+        operator = '';
+        operatorhtml.textContent = operator;
+        
+        update_display(number1, number2, operator);
+
+        // Update tracker to show the display is currently showing a calculated value
+        calculated_on_display = true;
+
         return
     } else if (key_press == '=') {
         return;
     }
 
     // Handle when users clicks a number or an operator
-    if (operators.slice(0, -1).includes(key_press)) {
+    if (operators.slice(0, -1).includes(key_press)) {  // if user clicks an operator
         operatorhtml.textContent = key_press;
         operator = key_press;
-    } else if (operator == '') {
+        update_display(number1, number2, operator);
+        calculated_on_display = false;
+    } else if (calculated_on_display == true) {  // This handles if a user clicks a number while display is showing a calculated value
+        reset();
+        update_display(number1, number2, operator); // resets display to blank
+        calculated_on_display = false;
         number1 = number1 + key_press;
         number1html.textContent = `number1: ${number1}`;
+        update_display(number1, number2, operator);
+ 
+    } else if (operator == '') { // When a user clicks a number
+        number1 = number1 + key_press;
+        number1html.textContent = `number1: ${number1}`;
+        update_display(number1, number2, operator);
     } else {
-        number2 = number2 + key_press;
+        number2 = number2 + key_press; // When a user clicks a number after clicking an operator
         number2html.textContent = `number2: ${number2}`;
+        update_display(number1, number2, operator);
         
     }
 }
 
+function reset() {
+    number1 = '';
+    number2 = '';
+    operator = '';
+}
+
+
+function update_display(number1, number2, operator) {
+    displayhtml.textContent = number1 + operator + number2;
+}
 
 function do_calculation(number1, number2, operator) {
+    number1 = Number(number1);
+    number2 = Number(number2);
+
     if (operator === "/") {
         return number1 / number2;
     } else if (operator === "+") {
