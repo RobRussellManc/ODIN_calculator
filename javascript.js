@@ -88,7 +88,7 @@ function reset() {
 
 
 function update_display(number1, number2, operator) {
-    displayhtml.textContent = number1 + operator + number2;
+    display_inner.textContent = number1 + operator + number2;
 }
 
 
