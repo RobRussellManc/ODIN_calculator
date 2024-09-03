@@ -1,7 +1,6 @@
 
 let main_box = document.querySelector("#main_container");
 let operator_box = document.querySelector("#operators_container");
-
 let number1html = document.querySelector("#number1");
 let number2html = document.querySelector("#number2");
 let operatorhtml = document.querySelector("#operator");
@@ -14,7 +13,7 @@ clearButton.addEventListener("click", () => reset());
 // Create operator buttons
 const operators = ['/', '+', '*', '-', '='];
 
-
+// Store numbers and operator
 let number1 = '';
 let number2 = '';
 let operator = '';
@@ -46,26 +45,23 @@ function record_keypresses(key_press) {
         number1 = number1 + key_press;
         update_display(number1, number2, operator);
         return
+    // if a user clicks minus before entering the 2nd number, allow it
     } else if (key_press == '-' && number2 == '') {
         number2 = number2 + key_press;
         update_display(number1, number2, operator);
         return
+    // if user clicks +, - or / when number 2 contains and digits, then ignore it
+    } else if (operators.slice(0, -1).includes(key_press) && number2 != '') {
+        return;
     }
-
 
 
     // Handle when user clicks equals
     if (key_press == '=' && number2 != '') {
         let result = do_calculation(number1, number2, operator);
-        //resulthtml.textContent = result;
-
-        // Number1 becomes the calculated result
         number1 = roundToThreeDPIfNeeded(result); 
-        //number1html.textContent = `number1: ${number1}`;
         number2 = '';
-        //number2html.textContent = `number2: ${number2}`;
         operator = '';
-        //operatorhtml.textContent = operator;
 
         update_display(number1, number2, operator);
 
@@ -78,32 +74,28 @@ function record_keypresses(key_press) {
     }
 
     // Handle when users clicks a number or an operator
-
-    // if user clicks an operator
-
-    // Handle if a user clicks an operator before entering a number
+    // Handle if a user clicks an operator before entering a number (ignore it)
     if (operators.slice(0, -1).includes(key_press) && (number1 == '')) {
         return
+        // else, if user clciks operator, allow it
     } else if (operators.slice(0, -1).includes(key_press)) {  
-        //operatorhtml.textContent = key_press;
         operator = key_press;
         update_display(number1, number2, operator);
         calculated_on_display = false;
-    } else if (calculated_on_display == true) {  // This handles if a user clicks a number while display is showing a calculated value
+        // This handles if a user clicks a number while display is showing a calculated value (reset the screen)
+    } else if (calculated_on_display == true) {  
         reset(); 
         update_display(number1, number2, operator); // resets display to blank
         calculated_on_display = false;
         number1 = number1 + key_press;
-        //number1html.textContent = `number1: ${number1}`;
         update_display(number1, number2, operator);
- 
-    } else if (operator == '') { // When a user clicks a number
+        // When a user clicks a number
+    } else if (operator == '') { 
         number1 = number1 + key_press;
-        //number1html.textContent = `number1: ${number1}`;
         update_display(number1, number2, operator);
+        // When a user clicks a number after clicking an operator (add it to 2nd number)
     } else {
-        number2 = number2 + key_press; // When a user clicks a number after clicking an operator
-        //number2html.textContent = `number2: ${number2}`;
+        number2 = number2 + key_press; 
         update_display(number1, number2, operator);
         
     }
@@ -118,10 +110,10 @@ function reset() {
 }
 
 
+// function to update the calc display
 function update_display(number1, number2, operator) {
     display_inner.textContent = number1 + operator + number2;
 }
-
 
 function do_calculation(number1, number2, operator) {
     number1 = Number(number1);
@@ -149,7 +141,6 @@ for (let i=9; i > -1; i--) {
     numbers_container.appendChild(button);    
 
     button.addEventListener("click", () => {record_keypresses(i)});
-
 }
 
 
